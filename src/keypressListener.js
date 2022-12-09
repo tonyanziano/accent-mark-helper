@@ -51,7 +51,6 @@ function handleKeyUp(ev) {
   if (lastCharTyped === undefined && accentedChars[key]) {
     // if the user typed one of the desired keys, start tracking it
     lastCharTyped = key;
-    console.log('Detected accented char: ', key);
   } else if (lastCharTyped && key === '/') {
     // we received a slash, try to convert the last typed character to its next accented form
     const accentedChar = convertCharToAccentedChar(lastCharTyped);
