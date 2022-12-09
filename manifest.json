@@ -1,0 +1,17 @@
+{
+  "name": "Accent Mark Helper",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "A simple extension that helps a user type letters with accent marks.",
+  "content_scripts": [{
+    "matches": [
+      "https://*/*"
+    ],
+    "exclude_globs": [
+      "https://my.babbel.com/*"
+    ],
+    "js": [
+      "src/keypressListener.js"
+    ]
+  }]
+}
