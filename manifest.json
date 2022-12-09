@@ -13,5 +13,8 @@
     "js": [
       "src/keypressListener.js"
     ]
-  }]
+  }],
+  "icons": {
+    "128": "src/128x128-icon.png"
+  }
 }
