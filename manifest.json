@@ -8,7 +8,7 @@
       "https://*/*"
     ],
     "exclude_globs": [
-      "https://my.babbel.com/*"
+      "https://*.babbel.com/*"
     ],
     "js": [
       "src/keypressListener.js"
