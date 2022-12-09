@@ -18,16 +18,18 @@ const accentedChars = {
 //
 // (one character can have one or two accented forms -- ex. e -> é -> è, a -> à)
 const characterConversionMap = {
-  'A': true,
+  'A': 'À',
   'a': 'à',
-  'E': true,
+  'E': 'É',
+  'É': 'È',
   'e': 'é',
   'é': 'è',
-  'I': true,
+  'I': 'Ì',
   'i': 'ì',
-  'O': true,
+  'O': 'Ó',
+  'Ó': 'Ò',
   'o': 'ò',
-  'U': true,
+  'U': 'Ù',
   'u': 'ù',
 }
 
