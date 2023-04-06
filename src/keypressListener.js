@@ -1,19 +1,3 @@
-// characters that we care about accenting
-const accentedChars = {
-  'A': true,
-  'a': true,
-  'E': true,
-  'e': true,
-  'I': true,
-  'i': true,
-  'O': true,
-  'o': true,
-  'U': true,
-  'u': true,
-};
-
-// TODO: We probably don't need to duplicate keys here with 'accentedChars'
-//
 // represents how one character is converted to its next "accented form"
 //
 // (one character can have one or two accented forms -- ex. e -> é -> è, a -> à)
@@ -33,45 +17,36 @@ const characterConversionMap = {
   'u': 'ù',
 }
 
-// keep track of the last character typed
-let lastCharTyped;
-
-// keep track of the focused element
-let focusedElem;
-
 // accents the character or returns 'undefined' if it can't be accented further
 function convertCharToAccentedChar(char) {
   return characterConversionMap[char];
 }
 
-// track keys pressed
 function handleKeyUp(ev) {
-  const { key } = ev;
+  const { key, target } = ev;
+  const { selectionStart, value } = target; // grab the cursor position of the input so we can parse around it
+
+  console.log(`Selection start: ${selectionStart}`);
+
+  // grab the current string and character typed
+  const currentInputString = value;
   
-  if (lastCharTyped === undefined && accentedChars[key]) {
-    // if the user typed one of the desired keys, start tracking it
-    lastCharTyped = key;
-  } else if (lastCharTyped && key === '/') {
-    // we received a slash, try to convert the last typed character to its next accented form
-    const accentedChar = convertCharToAccentedChar(lastCharTyped);
+  if (key === '/') {
+    console.log('Detected a forward slash, grabbing the character to the left of the slash...')
+    // look to the left of the cursor to see if we should transform the letter
+    const charToTheLeft = currentInputString[selectionStart - 2] || '';
+    const transformedChar = convertCharToAccentedChar(charToTheLeft);
 
-    if (accentedChar) {
-      // we want to keep tracking the key in case it can be accented further with another '/' character
-      lastCharTyped = accentedChar;
-
-      // swap the new character into the input
-      const currentInputString = focusedElem.value;
-      const newInputString = `${currentInputString.substring(0, currentInputString.length - 2)}${accentedChar}`;
-      focusedElem.value = newInputString;
-    } else {
-      // the character cannot be accented further, so stop tracking and reset
-      lastCharTyped = undefined;
+    if (transformedChar) {
+      console.log(`Converting ${charToTheLeft}/ --> ${transformedChar}`);
+      const updatedInputString = `${currentInputString.substring(0, selectionStart - 2)}${transformedChar}${currentInputString.substring(selectionStart)}`;
+      target.value = updatedInputString;
     }
-  } else {
-    // got a key that we don't care about, so stop tracking and reset
-    lastCharTyped = undefined
   }
 }
+
+// keep track of the focused element
+let focusedElem;
 
 // start listening to the focused element
 document.addEventListener('focus', ev => {
