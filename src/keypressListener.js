@@ -22,25 +22,31 @@ function convertCharToAccentedChar(char) {
   return characterConversionMap[char];
 }
 
+let ACCENT_MARK_HELPER_DEBUG;
+function debugLog(msg) {
+  if (ACCENT_MARK_HELPER_DEBUG) {
+    console.log(msg);
+  }
+}
+
 function handleKeyUp(ev) {
   const { key, target } = ev;
   const { selectionStart, value } = target; // grab the cursor position of the input so we can parse around it
 
-  console.log(`Selection start: ${selectionStart}`);
-
   // grab the current string and character typed
+  debugLog(`Selection start: ${selectionStart}`);
   const currentInputString = value;
   
   if (key === '/') {
-    console.log('Detected a forward slash, grabbing the character to the left of the slash...')
     // look to the left of the cursor to see if we should transform the letter
+    debugLog('Detected a forward slash, grabbing the character to the left of the slash...')
     const charToTheLeft = currentInputString[selectionStart - 2] || '';
     const transformedChar = convertCharToAccentedChar(charToTheLeft);
 
     if (transformedChar) {
-      console.log(`Converting ${charToTheLeft}/ --> ${transformedChar}`);
-      const updatedInputString = `${currentInputString.substring(0, selectionStart - 2)}${transformedChar}${currentInputString.substring(selectionStart)}`;
-      target.value = updatedInputString;
+      // swap the new character into the input
+      debugLog(`Converting ${charToTheLeft}/ --> ${transformedChar}`);
+      target.setRangeText(transformedChar, selectionStart - 2, selectionStart, 'end');
     }
   }
 }
